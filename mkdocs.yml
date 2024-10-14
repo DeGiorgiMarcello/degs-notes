@@ -1,0 +1,56 @@
+site_name: "Deg's notes"
+
+nav:
+  - Home: index.md
+  - About me: about.md
+
+theme:
+  name: material
+  features:
+    - navigation.tabs
+  palette: 
+        # Palette toggle for light mode
+  - scheme: brownish
+    toggle:
+      icon: material/weather-night
+      name: Switch to dark mode
+
+  # Palette toggle for dark mode
+  - scheme: slate
+    toggle:
+      icon: material/weather-sunny
+      name: Switch to light mode
+  font:
+    text: Montserrat
+
+
+plugins:
+  - search
+  - blog:
+      blog_dir: .
+  - tags
+
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      name: Linkedin
+      link: https://www.linkedin.com/in/marcello-de-giorgi-92281b145/
+
+    - icon: fontawesome/brands/telegram
+      name: Telegram
+      link: https://t.me/MarcelloDeGiorgi
+
+    - icon: fontawesome/brands/github
+      name: GitHub
+      link: http://github.com/DeGiorgiMarcello
+
+    - icon: /material/mail
+      name: Mail
+      link: degiorgimarcello@gmail.com
+
+
+
+copyright: Copyright &copy; 2024 - Marcello De Giorgi
+
+extra_css:
+  - stylesheets/extra.css
