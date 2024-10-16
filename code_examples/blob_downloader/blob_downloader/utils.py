@@ -1,5 +1,5 @@
 from azure.storage.blob import ContainerClient
-from settings import S
+from blob_downloader.settings import S
 
 
 def get_container_client(container_name: str) -> ContainerClient:
