@@ -1,7 +1,7 @@
 [data-md-color-scheme="brownish"] {
-  --md-primary-fg-color:        #876b55;
+  --md-primary-fg-color: #876b55;
   --md-primary-fg-color--light: #ECB7B7;
-  --md-primary-fg-color--dark:  #90030C;
+  --md-primary-fg-color--dark: #90030C;
 }
 
 /*[data-md-color-scheme="night"] {
@@ -15,9 +15,9 @@
 }
 */
 .md-typeset h1 {
-  font-size: 50px;
+  font-size: 30px;
 }
 
 p {
-  font-size: 20px;
+  font-size: 16px;
 }
