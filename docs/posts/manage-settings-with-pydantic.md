@@ -1,11 +1,11 @@
 ---
-draft: true 
+draft: false 
 date: 2024-10-18 
 comments: true
 authors:
   - MarcelloDeg
 categories:
-  - validation
+  - Validation
 
 tags:
   - pydantic
@@ -15,6 +15,7 @@ tags:
 ---
 
 # Manage settings with Pydantic
+![pydantic-image](./images/pydantic_logo.jpg){ width=150 align=right}
 [Pydantic](https://docs.pydantic.dev/latest/) is a wonderful library that allows to easily validate your data, simply defining a schema. It is highly customizable and can be used, for instance, to validate data coming from a POST request. 
 
 In this tutorial we will use it to create a `Settings` class whose fields can be changed in different ways, triggering any time the validation.
