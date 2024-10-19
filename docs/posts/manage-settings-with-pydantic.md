@@ -17,7 +17,7 @@ tags:
 # Manage settings with Pydantic
 [Pydantic](https://docs.pydantic.dev/latest/) is a wonderful library that allows to easily validate your data, simply defining a schema. It is highly customizable and can be used, for instance, to validate data coming from a POST request. 
 
-In this tutorial we will use it to create a `Settings` class whose fields can be changed in different ways, triggering any time the validation. 
+In this tutorial we will use it to create a `Settings` class whose fields can be changed in different ways, triggering any time the validation.
 
 <!-- more -->
 
@@ -210,6 +210,8 @@ class Settings(BaseSettings):
 It is also possible to use the same validator for more than one field, listing all the fields. In this case, the message shown in the exception raised wouldn't be correct! Fortunately, a third argument gives us a hand:
 
 ```python
+from pydantic import ValidationInfo
+
 @field_validator("password","username")
 @classmethod
 def validate_field_length(cls, v: str, info: ValidationInfo):
@@ -218,6 +220,132 @@ def validate_field_length(cls, v: str, info: ValidationInfo):
     return v
 ```
 
+#### Before and After validators
+Sometimes would be useful to apply some logic right before the pydantic internal validation on the types. We can do this using the `mode` attribute of the `field_validator` decorator.
+
+For instance, we would like to strip the input username before the type validator does its job:
+
+```python
+class Settings(BaseSettings):
+    ...
+
+    @field_validator("username", mode="before")
+    @classmethod
+    def strip_raw(cls, v: Any, info: ValidationInfo):
+        if isinstance(v,str):
+            print("Yes, it's a string!")
+            v = v.strip()
+        else:
+            print("Nope, it's a {}!".format(type(v)))
+        return v
+```
+
+```
+Settings(username="Deg     ", password="test", age=29, role="reader")
+```
+
+> Yes, it's a string!
+
+> Settings(username='Deg' password=...)
+
+As you can see the, the white space has been removed and then the type validation has been performed. To better notice this, let's try passing an `int` rather than a `str`:
+
+```
+Settings(username=42, password="test", age=29, role="reader")
+```
+> Nope, it's a <class 'int'\>! 
+
+```
+1 validation error for Settings
+username
+  Input should be a valid string [type=string_type, input_value=4, input_type=int]
+```
+
+Other than running validators **before**, it is also possible to run them **after**. Sometimes could be actually useful to apply some logic to a freshly casted input data (remember that after the type validation, each input is casted from string to the correct requested type field!). The syntax is basically the same as the one seen before:
+
+```py 
+@field_validator(<field_name>, mode="after")
+```
+
+#### Annotated types
+Instead of defining field validators, it is possible to bind a validator to a specific type.
+In that case would be sufficient the use of the `Annotated`, extending the type with a pydantic validator made for this purpose, like `BeforeValidator` and `AfterValidator`.
+
+Let's take again the strip example seen before:
+
+```py
+from typing_extensions import Annotated
+from pydantic import BeforeValidator
+from typing import Any
+
+def strip_raw(v: Any):
+    if isinstance(v, str):
+        print("Yes, it's a string!")
+        v = v.strip()
+    else:
+        print("Nope, it's a {}!".format(type(v)))
+    return v
+
+strippedString = Annotated[str, BeforeValidator(strip_raw)]
+
+
+class Settings(BaseSettings):
+    username: strippedString
+    password: SecretStr
+    age: PositiveInt
+    role: Role = Role.READER
+```
+
+In this way the validator is bind to the type str rather than to one or more fields.
+
+For more on the validators, take a look at the [validators documentation](https://docs.pydantic.dev/latest/concepts/validators/).
+
+
+## Conclusion
+In this guide we have seen how to define a Settings class whose values can be changed by setting environment variables or simply loading a `.env` file. We have seen how **Pydantic** validates each value according to the provided field type, how to define more complex custom types and extend the validation with other functions that can be executed in a given order.
+
+Leveraging the power of the `.env` files and of the fields' default values we can be sure that all the instance of the class (created without any input arguments, take a look at the [evaluation order](#evaluation-order)) will have always the same settings. What we could do to stress this point (and avoid the tedious creation of Settings instances in all the modules in which we need to access them) is to create in our `settings.py` module an instance of the class. Given how pydantic works, it will be a *naive* singleton.
+
+!!! example "To sum up"
+    ```python title="settings.py"
+
+    from enum import StrEnum
+    from pydantic.types import SecretStr, PositiveInt
+    from pydantic import BeforeValidator, field_validator, ValidationInfo
+    from pydantic_settings import BaseSettings
+    from typing import Any
+    from typing_extensions import Annotated
+
+    class Role(StrEnum):
+        READER = "reader"
+        MODERATOR = "moderator"
+        ADMIN = "admin"
+
+    def strip_raw(v: Any):
+        if isinstance(v,str):
+            print("Yes, it's a string!")
+            v = v.strip()
+        else:
+            print("Nope, it's a {}!".format(type(v)))
+        return v
+
+    strippedString = Annotated[str, BeforeValidator(strip_raw)]
+
+    class Settings(BaseSettings):
+        username: strippedString
+        password: SecretStr
+        age: PositiveInt
+        role: Role = Role.READER
+
+        @field_validator("password","username", mode="after")
+        @classmethod
+        def validate_field_length(cls, v: str, info: ValidationInfo):
+            if len(v) < 8:
+                raise ValueError(f"The field {info.field_name} must have a length at least of 8 characters")
+            return v
+
+    S = Settings()  # <- import this in the other modules
+    ```
 
 ## Sources
 - <https://docs.pydantic.dev/latest/>
