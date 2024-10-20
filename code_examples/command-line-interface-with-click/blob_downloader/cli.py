@@ -1,9 +1,9 @@
 import click
 from blob_downloader.version import __version__
 from blob_downloader.settings import S
+from blob_downloader.cli_utils import read_settings_file, update_settings_file
 from typing import Any
-
-logo = f"""
+logo = fr""" 
 
   ____  _       _       _____                      _                 _           
  |  _ \| |     | |     |  __ \                    | |               | |          
@@ -23,13 +23,12 @@ def cli(): ...
 
 @click.group()
 def settings():
-    "Commands for the settings management"
+    """Groups of commands for settings management"""
 
-
-@settings.command(name="set", short_help="Set a setting value")
-@click.argument("name", type=str, required=True)
-@click.argument("value", required=True)
-def _set(name: str, value: Any):
+@settings.command(name="set", help="Set a setting value")
+@click.argument("name", type=str)
+@click.argument("value")
+def _set(name, value):
     if name in S.model_fields:
         try:
             S.model_validate({name: value})
@@ -37,7 +36,18 @@ def _set(name: str, value: Any):
             click.secho(e, fg="red")
             click.get_current_context().exit(2)
         else:
-            ...
+            update_settings_file(name, value)
+            click.secho(f"Setting '{name}' successfully updated!", fg="green")
+    else:
+        click.secho(f"Setting '{name}' is not listed among the available settings.", fg="red")
+        click.get_current_context().exit(2)
 
+@settings.command(help="Show the current values")
+def show():
+    ...
+
+@settings.command(help="Unset a setting value")
+def unset():
+    ...
 
 cli.add_command(settings)
