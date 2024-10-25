@@ -4,7 +4,7 @@ from enum import Enum
 from pydantic import field_validator
 from os import makedirs
 from pathlib import Path
-
+from os.path import expanduser, exists
 
 class LogLevels(str, Enum):
     TRACE = "TRACE"
@@ -46,8 +46,8 @@ class Settings(BaseSettings):
     @field_validator("OUTPUT_FOLDER")
     @classmethod
     def check_output_folder(cls, v):
-        v = Path(v).resolve()
-        if not v.exists():
+        v = expanduser(v)
+        if not exists(v):
             makedirs(v, exist_ok=True)
         return v
 

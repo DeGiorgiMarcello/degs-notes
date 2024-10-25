@@ -1,20 +1,22 @@
 ---
-draft: true 
-date: 2024-10-20 
+draft: false 
+date: 2024-10-25 
 comments: true
 authors:
   - MarcelloDeg
 categories:
-  - Libraries
+  - Python
 
 tags:
   - click
+  - pydantic
   - command_line_interface
   - python
-
 ---
 
 # Create a Comand line interface in few minutes
+
+![cli title](./images/cli_post_title.png){ width=800 }
 
 A command line interface could seem an ancient tool to all non expert users, nowadays used to fancy click and drop user interfaces. Nothing more wrong! It is also a valid tool to enhance your libraries and projects, reusable in bash scripts and ci/cd pipelines.
 
@@ -225,7 +227,6 @@ Typing `blobdow --version` results in:
 #### Settings set
 As we have seen in [this article](./manage-settings-with-pydantic.md), the settings can be set via environment variables. Any changes that we will do to our settings must last also when the cli command ends its execution. Therefore, we must store any settings change in the `.env` file. 
 
-Any function to read and write this file will be added to the `cli_utils.py` and won't be here, for the sake of simplicity, analyzed. 
 
 ```python
 @settings.command(name="set", help="Set a setting value")
@@ -269,14 +270,105 @@ Let's go over line by line:
     ![set error2](./images/set_error2.png)
 
 #### Settings unset
+The *unset* is quite similar to the *set*. 
 
+```python
+@settings.command(help="Unset a setting value")
+@click.argument("name", type=str)
+def unset(name):
+    env_path = S.model_config.get("env_file")
+    if name in S.model_fields:
+        if name in dotenv_values(env_path):
+            unset_key(env_path, name)
+        click.secho(f"Setting '{name}' unset successfully.", fg="green")
+    else:
+        click.secho(f"Setting '{name}' does not exists.", fg="red")
+```
+
+Let's now add the option `--all` to restore to the default value all the settings all at once.
+To do so, we just need to remove the `.env` file. This can be done in different ways: let's use a *callback*. 
+
+##### Options' callbacks
+Callbacks allow to alter the execution flow defined in the command body: this can be quite usefule in some cases, expecially when associated with the command `is_eager=True`, that ignore all the other options and arguments and execute the callback first!
+
+```python
+def remove_env_file(ctx, param, value):
+    """Remove the env file"""
+    if not value or ctx.resilient_parsing:
+        return
+    if click.confirm("Are you sure you want to delete the .env file?", abort=True):
+        env_path = S.model_config.get("env_file")
+        if env_path and exists(env_path):
+            remove(env_path)
+            click.secho(f"File .env ({env_path}) removed correctly.")
+        ctx.exit(0)
+...
+@click.option("-a", "--all", is_flag=True, callback=remove_env_file,  help="Restore all the settings")
+def unset(name):
+    ...
+```
+
+A lot of stuff here! Let's start from the end. The *option* decorator accepts as input a short and a long name (you are not force to define them all). The `is_flag` specifies that the option does not require any value after and that it's own presence is equals to the value `True`. The `callback` argument is the function defined above.
+
+The Callback signature requires the current context `ctx`, the command `params` and the `value` of the option. The following block is a common pattern in the click callbacks:
+
+```python
+if not value or ctx.resilient_parsing:
+    return
+```
+It is used to prevent the callback execution in those cases in which click parses the command (*resilient parsing*): if you try to remove it, you will notice that the callback will be executed even if the `--all` option is not passed.
+
+The `click.confirm` function returns a prompt (y/n) to the user, quite useful in a lot of situations.
+
+##### A simpler solution
+Use a callback for our purpose has been like shooting a mosquito with a bazooka. Callbacks are usually used for validating or transforming the input parameters before to continue with the command body. We could have achieved the same purpose using an `if/else` statement.
+
+```python
+@settings.command(help="Unset a setting value")
+@click.argument("name", type=str)
+@click.option("-a", "--all", is_flag=True, help="Restore all the settings")
+def unset(name, all):
+    if all:
+        # remove the .env file and quit
+        ...
+    env_path = S.model_config.get("env_file")
+    if name in S.model_fields:
+        if name in dotenv_values(env_path):
+            unset_key(env_path, name)
+        click.secho(f"Setting '{name}' unset successfully.", fg="green")
+    else:
+        click.secho(f"Setting '{name}' does not exists.", fg="red")
+```
 
 #### Settings show
+The `settings` command does not requires special arguments or options. We just need to print the settings names, the values and (optionally) the default ones.
 
+
+```python
+@settings.command(help="Show the current values")
+def show():
+    click.echo("\n")
+    for name, values in S.model_fields.items():
+        default = values.default
+        click.echo(f"{name}: ", nl=False)
+        click.secho(getattr(S,name),fg="green", nl=False)
+        click.echo(" (", nl=False)
+        click.secho(f"{default}", fg="red", nl=False)
+        click.echo(")")
+
+    click.echo("\n")
+```
+
+`blobdow settings show` results in:
+
+![settings show](images/settings_show.png)
 
 ## Conclusion
+In this article we have seen only the peak of the iceberg of this wonderful library. In few lines of code we have been able to create a simple but effective and quite useful command line interface to manage the settings of our project. We still need to test that everything works properly, but that will be a subject for another article!
 
 ## Sources
 
 - <https://click.palletsprojects.com/en/8.1.x/>
 - <https://amir.rachum.com/python-entry-points/>
+- <https://click.palletsprojects.com/en/stable/arguments/>
+- <https://click.palletsprojects.com/en/stable/options/>

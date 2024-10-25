@@ -6,6 +6,7 @@ authors:
   - MarcelloDeg
 categories:
   - Validation
+  - Python
 
 tags:
   - pydantic
