@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     AZURE_ACCOUNT_KEY: SecretStr = ""
     "Azure Blob Storage account key"
 
+    AZURE_CONTAINER: str = ""
+    "Container from/to pull/push blobs"
+
     LOG_LEVEL: LogLevels = LogLevels.WARNING
     "Log level. Default to 'WARNING' "
 
