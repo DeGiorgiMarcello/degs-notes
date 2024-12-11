@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 
-class Driver(meta=ABC):
+
+class Driver(ABC):
 
     @abstractmethod
     def pull(self, blob_uri: str): ...

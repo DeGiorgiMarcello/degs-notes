@@ -6,6 +6,7 @@ from os import makedirs
 from pathlib import Path
 from os.path import expanduser, exists
 
+
 class LogLevels(str, Enum):
     TRACE = "TRACE"
     DEBUG = "DEBUG"
@@ -16,7 +17,9 @@ class LogLevels(str, Enum):
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=Path("~/.env").expanduser(), env_file_encoding="utf-8")
+    model_config = SettingsConfigDict(
+        env_file=Path("~/.env").expanduser(), env_file_encoding="utf-8", extra="ignore"
+    )
 
     AZURE_ACCOUNT_NAME: str = ""
     "Azure Blob Storage account name"
