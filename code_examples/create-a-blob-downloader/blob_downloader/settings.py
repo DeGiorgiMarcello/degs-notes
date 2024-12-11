@@ -21,11 +21,9 @@ class Settings(BaseSettings):
         env_file=Path("~/.env").expanduser(), env_file_encoding="utf-8", extra="ignore"
     )
 
-    AZURE_ACCOUNT_NAME: str = ""
-    "Azure Blob Storage account name"
 
-    AZURE_ACCOUNT_KEY: SecretStr = ""
-    "Azure Blob Storage account key"
+    AZURE_BLOB_CONNECTION_STRING: SecretStr = ""
+    "Azure Blob Storage connection string"
 
     AZURE_CONTAINER: str = ""
     "Container from/to pull/push blobs"
@@ -36,18 +34,6 @@ class Settings(BaseSettings):
     OUTPUT_FOLDER: str = "~/output"
     "Output folder to save the downloaded blobs"
 
-    @property
-    def AZURE_BLOB_CONNECTION_STRING(self):
-        conn_str = {
-            "DefaultEndpointsProtocol": "https",
-            "AccountName": self.AZURE_ACCOUNT_NAME,
-            "AccountKey": self.AZURE_ACCOUNT_KEY.get_secret_value(),
-            "BlobEndpoint": f"https://{self.AZURE_ACCOUNT_NAME}.blob.core.windows.net/",
-            "QueueEndpoint": f"https://{self.AZURE_ACCOUNT_NAME}.queue.core.windows.net/",
-            "TableEndpoint": f"https://{self.AZURE_ACCOUNT_NAME}.table.core.windows.net/",
-            "FileEndpoint": f"https://{self.AZURE_ACCOUNT_NAME}.file.core.windows.net/",
-        }
-        return SecretStr(";".join([f"{k}={v}" for k, v in conn_str.items()]))
 
     @field_validator("OUTPUT_FOLDER")
     @classmethod
