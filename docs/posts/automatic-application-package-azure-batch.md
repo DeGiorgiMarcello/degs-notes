@@ -76,14 +76,25 @@ elif response.state == "Pending":
 On the Batch portal, in `Features/Applications` you will see something like this:
 ![alt text](images/app_pack_pending.png)
 ### 2. Zip the needed files
-import zipfile  
 
 ```python
+from tempfile import TemporaryDirectory
+from os.path import isdir, join
+import shutil
+
 ...
 elif response.state == "Pending":
-    with zipfile.ZipFile(os.getenv("VERSION_NAME"), "w") as zf:
+    with TemporaryDirectory() as temp_dir:
         for file in needed_files:
-            zf.write(file, file)
+            path = join(BASE_DIR, file)
+            if isdir(path):
+                shutil.copytree(path, join(temp_dir, file))
+            else:
+                shutil.copy(path, temp_dir)
+
+        tmp_path = join(temp_dir, os.getenv("VERSION_NAME"))
+        shutil.make_archive(tmp_path, "zip", root_dir=temp_dir)
+        ...
 ```
 
 The needed files (a list of files path to be added to the archive) are defined above in the script.
@@ -95,9 +106,10 @@ The `response` object of step 1 contains the URL of the blob storage where the a
 ```python
 from azure.storage.blob import BlobClient
 
-...
-blob_client = BlobClient.from_blob_url(response.storage_url)
-blob_client.upload_blob(os.getenv("VERSION_NAME"))
+    ...
+    blob_client = BlobClient.from_blob_url(response.storage_url)
+    with open(tmp_path + ".zip", "rb") as data:
+        blob_client.upload_blob(data, overwrite=True)
 ```
 
 ### 4. Activate the new version of the application package
@@ -122,9 +134,18 @@ The application package is now active and ready to be used in your Azure Batch j
 ```python
 from azure.identity import DefaultAzureCredential
 from azure.mgmt.batch import BatchManagementClient
-from azure.storage.blob import BlobClient  
-import zipfile  
+from azure.storage.blob import BlobClient
+import os
+from os.path import isdir, join
+import shutil  
+from tempfile import TemporaryDirectory
 
+
+needed_files = [
+    "setup.py
+    "setup.cfg",
+    "code" # this is a folder
+]
 
 client = BatchManagementClient(
         credential=DefaultAzureCredential(),
@@ -141,12 +162,22 @@ if response.state == "Active":
     raise Exception("Application package is already active. Please provide a new version name.")
 
 elif response.state == "Pending":
-    with zipfile.ZipFile(os.getenv("VERSION_NAME"), "w") as zf:
-        for file in needed_files:
-            zf.write(file, file)
 
-blob_client = BlobClient.from_blob_url(response.storage_url)
-blob_client.upload_blob(os.getenv("VERSION_NAME"))
+    with TemporaryDirectory() as temp_dir:
+        for file in needed_files:
+            path = join(BASE_DIR, file)
+            if isdir(path):
+                shutil.copytree(path, join(temp_dir, file))
+            else:
+                shutil.copy(path, temp_dir)
+
+        
+        tmp_path = join(temp_dir, os.getenv("VERSION_NAME"))
+        shutil.make_archive(os.getenv("VERSION_NAME"), "zip", root_dir=temp_dir)
+
+        blob_client = BlobClient.from_blob_url(response.storage_url)
+        with open(tmp_path + ".zip", "rb") as data:
+            blob_client.upload_blob(data, overwrite=True)
 
 client.application_package.activate(
     resource_group_name=os.getenv("RESOURCE_GROUP_NAME"),
