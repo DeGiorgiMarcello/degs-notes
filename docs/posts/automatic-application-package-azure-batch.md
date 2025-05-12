@@ -1,3 +1,20 @@
+---
+draft: false 
+date: 2025-05-11 
+comments: true
+authors:
+  - MarcelloDeg
+categories:
+  - Azure
+  - Python
+  - Batch
+
+tags:
+  - Batch
+  - ApplicationPackages
+  - Deploy 
+
+---
 # How to create an Azure Batch's Application Package automatically
 While using Azure Batch, you may need to create an application package to run your applications in the cloud. This package contains all the necessary files and dependencies for your application to run on Azure Batch nodes. 
 
