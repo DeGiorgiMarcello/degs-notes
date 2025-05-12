@@ -16,11 +16,13 @@ tags:
 
 ---
 # How to create an Azure Batch's Application Package automatically
-While using Azure Batch, you may need to create an application package to run your applications in the cloud. This package contains all the necessary files and dependencies for your application to run on Azure Batch nodes. 
+While using Azure Batch, you may need to create an application package to run your applications in the cloud. 
 
 The creation can be done manually, generating and uploading a `.zip` file to the Azure Batch resource Portal. However, this process can be tedious and time-consuming, especially if you have multiple applications or need to update the package frequently, for instance at every new release (or hotfix!).
 
-In this post we will cover how to automate the creation of an Azure Batch application package using a Python script. 
+In this post we will cover how to automate the creation of an Azure Batch application package using a Python script.
+
+<!-- more -->
 
 ## Prerequisites
 ### Things you should know
