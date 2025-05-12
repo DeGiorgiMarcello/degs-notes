@@ -9,23 +9,23 @@
       
       
       
+        <link rel="prev" href="../../../../2024/10/25/create-a-comand-line-interface-in-few-minutes/">
       
-        <link rel="next" href="about/">
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.37">
     
     
       
-        <title>Home - Deg's notes</title>
+        <title>How to create an Azure Batch's Application Package automatically - Deg's notes</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.8c3ca2c6.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.8c3ca2c6.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.06af60db.min.css">
+        <link rel="stylesheet" href="../../../../assets/stylesheets/palette.06af60db.min.css">
       
       
 
@@ -44,9 +44,9 @@
       
     
     
-      <link rel="stylesheet" href="stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -72,7 +72,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#welcome-to-my-personal-notes" class="md-skip">
+        <a href="#how-to-create-an-azure-batchs-application-package-automatically" class="md-skip">
           Skip to content
         </a>
       
@@ -86,7 +86,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="Deg&#39;s notes" class="md-header__button md-logo" aria-label="Deg's notes" data-md-component="logo">
+    <a href="../../../.." title="Deg&#39;s notes" class="md-header__button md-logo" aria-label="Deg's notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -106,7 +106,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              How to create an Azure Batch's Application Package automatically
             
           </span>
         </div>
@@ -203,7 +203,7 @@
   
   
     <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+      <a href="../../../.." class="md-tabs__link">
         
   
     
@@ -220,7 +220,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="about/" class="md-tabs__link">
+      <a href="../../../../about/" class="md-tabs__link">
         
   
     
@@ -239,7 +239,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="archive/2025/" class="md-tabs__link">
+        <a href="../../../../archive/2025/" class="md-tabs__link">
           
   
   Archive
@@ -257,7 +257,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="category/azure/" class="md-tabs__link">
+        <a href="../../../../category/azure/" class="md-tabs__link">
           
   
   Categories
@@ -281,7 +281,7 @@
               
                 
               
-              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -292,7 +292,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="Deg&#39;s notes" class="md-nav__button md-logo" aria-label="Deg's notes" data-md-component="logo">
+    <a href="../../../.." title="Deg&#39;s notes" class="md-nav__button md-logo" aria-label="Deg's notes" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
@@ -311,19 +311,10 @@
   
   
     
-      
-    
   
   
     <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+      <a href="../../../.." class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -332,7 +323,6 @@
   
 
       </a>
-      
     </li>
   
 
@@ -344,7 +334,7 @@
   
   
     <li class="md-nav__item">
-      <a href="about/" class="md-nav__link">
+      <a href="../../../../about/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -404,7 +394,7 @@
   
   
     <li class="md-nav__item">
-      <a href="archive/2025/" class="md-nav__link">
+      <a href="../../../../archive/2025/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -427,7 +417,7 @@
   
   
     <li class="md-nav__item">
-      <a href="archive/2024/" class="md-nav__link">
+      <a href="../../../../archive/2024/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -495,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="category/azure/" class="md-nav__link">
+      <a href="../../../../category/azure/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -518,7 +508,7 @@
   
   
     <li class="md-nav__item">
-      <a href="category/batch/" class="md-nav__link">
+      <a href="../../../../category/batch/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -541,7 +531,7 @@
   
   
     <li class="md-nav__item">
-      <a href="category/python/" class="md-nav__link">
+      <a href="../../../../category/python/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -564,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="category/validation/" class="md-nav__link">
+      <a href="../../../../category/validation/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -595,7 +585,7 @@
               
                 
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -607,6 +597,107 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#prerequisites" class="md-nav__link">
+    <span class="md-ellipsis">
+      Prerequisites
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Prerequisites">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#things-you-should-know" class="md-nav__link">
+    <span class="md-ellipsis">
+      Things you should know
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#packages" class="md-nav__link">
+    <span class="md-ellipsis">
+      Packages
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#steps" class="md-nav__link">
+    <span class="md-ellipsis">
+      Steps
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#step-by-step" class="md-nav__link">
+    <span class="md-ellipsis">
+      Step by step
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step by step">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-create-a-new-version-of-the-application-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. Create a new version of the application package
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-zip-the-needed-files" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. Zip the needed files
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-upload-the-zip-file-to-azure-blob-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. Upload the zip file to Azure Blob Storage
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-activate-the-new-version-of-the-application-package" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Activate the new version of the application package
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -614,77 +705,121 @@
             
           
           
-  <div class="md-content" data-md-component="content">
-    <div class="md-content__inner">
-      <header class="md-typeset">
-        <h1 id="welcome-to-my-personal-notes">Welcome to my personal notes</h1>
-<p>Multiple times I've managed to solve a new problem using an old solution, pleased to notice how much time I saved and how the quality of the final result has increased since the first time I had struggled with the original problem.</p>
-<p>I know, it's simply the definition of the <a href="https://en.wikipedia.org/wiki/Learning_curve">learning curve</a>, but I've always been fascinated by how good the brain is in learning and storing new stuff!</p>
-<p>In my daily work I often tend to go back and take a look at some old code that I or my colleges have written. Unfortunately this is not always possible, especially if your code is in your company's protected repositories and you are just sitting confortably on the couch, with your personal laptop on the lap, and the <em>work laptop</em> is in your <em>work bag</em> in the other room, or (much more reasonably) if you just changed job. </p>
-<p>For this reason I've decide to collect here some guides, tutorials and personal notes that could be useful in the future. </p>
-<p>Enjoy your reading! 📖</p>
-      </header>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/16227517?v=4" alt="Marcello De Giorgi">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2025-05-11 00:00:00">May 11, 2025</time></li>
-        
-          <li class="md-meta__item">
-            in
+  <div class="md-content md-content--post" data-md-component="content">
+    <div class="md-sidebar md-sidebar--post" data-md-component="sidebar" data-md-type="navigation">
+      <div class="md-sidebar__scrollwrap">
+        <div class="md-sidebar__inner md-post">
+          <nav class="md-nav md-nav--primary">
+            <div class="md-post__back">
+              <div class="md-nav__title md-nav__container">
+                <a href="../../../.." class="md-nav__link">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+                  <span class="md-ellipsis">
+                    Back to index
+                  </span>
+                </a>
+              </div>
+            </div>
             
-              <a href="category/azure/" class="md-meta__link">Azure</a>, 
-              <a href="category/python/" class="md-meta__link">Python</a>, 
-              <a href="category/batch/" class="md-meta__link">Batch</a></li>
-        
-        
+              <div class="md-post__authors md-typeset">
+                
+                  <div class="md-profile md-post__profile">
+                    <span class="md-author md-author--long">
+                      <img src="https://avatars.githubusercontent.com/u/16227517?v=4" alt="Marcello De Giorgi">
+                    </span>
+                    <span class="md-profile__description">
+                      <strong>
+                        
+                          Marcello De Giorgi
+                        
+                      </strong>
+                      <br>
+                      Creator
+                    </span>
+                  </div>
+                
+              </div>
+            
+            <ul class="md-post__meta md-nav__list">
+              <li class="md-nav__item md-nav__item--section">
+                <div class="md-post__title">
+                  <span class="md-ellipsis">
+                    Metadata
+                  </span>
+                </div>
+                <nav class="md-nav">
+                  <ul class="md-nav__list">
+                    <li class="md-nav__item">
+                      <div class="md-nav__link">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 19H5V8h14m-3-7v2H8V1H6v2H5c-1.11 0-2 .89-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2h-1V1m-1 11h-5v5h5z"/></svg>
+                        <time datetime="2025-05-11 00:00:00" class="md-ellipsis">May 11, 2025</time>
+                      </div>
+                    </li>
+                    
+                    
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 3v15h3V3zm3 2 4 13 3-1-4-13zM5 5v13h3V5zM3 19v2h18v-2z"/></svg>
+                          <span class="md-ellipsis">
+                            in
+                            
+                              <a href="../../../../category/azure/">Azure</a>, 
+                              <a href="../../../../category/python/">Python</a>, 
+                              <a href="../../../../category/batch/">Batch</a></span>
+                        </div>
+                      </li>
+                    
+                    
+                      
+                      <li class="md-nav__item">
+                        <div class="md-nav__link">
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 20a8 8 0 0 0 8-8 8 8 0 0 0-8-8 8 8 0 0 0-8 8 8 8 0 0 0 8 8m0-18a10 10 0 0 1 10 10 10 10 0 0 1-10 10C6.47 22 2 17.5 2 12A10 10 0 0 1 12 2m.5 5v5.25l4.5 2.67-.75 1.23L11 13V7z"/></svg>
+                          <span class="md-ellipsis">
+                            
+                              3 min read
+                            
+                          </span>
+                        </div>
+                      </li>
+                    
+                  </ul>
+                </nav>
+              </li>
+            </ul>
+          </nav>
           
-          <li class="md-meta__item">
-            
-              3 min read
-            
-          </li>
-        
-      </ul>
-      
+        </div>
+      </div>
     </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="how-to-create-an-azure-batchs-application-package-automatically"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/">How to create an Azure Batch's Application Package automatically</a></h2>
+    <article class="md-content__inner md-typeset">
+      
+        
+
+
+<h1 id="how-to-create-an-azure-batchs-application-package-automatically">How to create an Azure Batch's Application Package automatically</h1>
 <p>While using Azure Batch, you may need to create an application package to run your applications in the cloud. This package contains all the necessary files and dependencies for your application to run on Azure Batch nodes. </p>
 <p>The creation can be done manually, generating and uploading a <code>.zip</code> file to the Azure Batch resource Portal. However, this process can be tedious and time-consuming, especially if you have multiple applications or need to update the package frequently, for instance at every new release (or hotfix!).</p>
 <p>In this post we will cover how to automate the creation of an Azure Batch application package using a Python script. </p>
-<h3 id="prerequisites"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#prerequisites">Prerequisites</a></h3>
-<h4 id="things-you-should-know"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#things-you-should-know">Things you should know</a></h4>
+<h2 id="prerequisites">Prerequisites</h2>
+<h3 id="things-you-should-know">Things you should know</h3>
 <ul>
 <li>Basic knowledge of Python and Azure Batch</li>
 <li>What is an <a href="https://learn.microsoft.com/en-us/azure/batch/batch-application-packages">Application Package</a></li>
 </ul>
-<h4 id="packages"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#packages">Packages</a></h4>
+<h3 id="packages">Packages</h3>
 <p>The following packages are required:
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>pip install azure-identity azure-mgmt-batch azure-storage-blob
 </span></code></pre></div></p>
-<h3 id="steps"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#steps">Steps</a></h3>
+<h2 id="steps">Steps</h2>
 <p>The script will:
 1. Create a new version of the application package (and a new application if it does not exist).
 1. Zip the needed files
 1. Upload the zip file to Azure Blob Storage
 1. Activate the new version of the application package</p>
-<h3 id="step-by-step"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#step-by-step">Step by step</a></h3>
+<h2 id="step-by-step">Step by step</h2>
 <p><strong>NOTE</strong>: For the sake of simplicity, we will use the AzureDefaultCredential, which uses the Azure CLI credentials. You can use any other authentication method supported by the Azure SDK for Python.</p>
 <p>All the configuration parameters are stored in environment variables. You can set them in your terminal or use a <code>.env</code> file with the <code>python-dotenv</code> package.</p>
-<h4 id="1-create-a-new-version-of-the-application-package"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#1-create-a-new-version-of-the-application-package">1. Create a new version of the application package</a></h4>
+<h3 id="1-create-a-new-version-of-the-application-package">1. Create a new version of the application package</h3>
 <p><div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span> <span class="nn">azure.identity</span> <span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span> <span class="nn">azure.mgmt.batch</span> <span class="kn">import</span> <span class="n">BatchManagementClient</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
@@ -706,8 +841,8 @@
 </span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="o">...</span>
 </span></code></pre></div>
 On the Batch portal, in <code>Features/Applications</code> you will see something like this:
-<img alt="alt text" src="images/app_pack_pending.png" /></p>
-<h4 id="2-zip-the-needed-files"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#2-zip-the-needed-files">2. Zip the needed files</a></h4>
+<img alt="alt text" src="../../../../images/app_pack_pending.png" /></p>
+<h3 id="2-zip-the-needed-files">2. Zip the needed files</h3>
 <p>import zipfile  </p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="o">...</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Pending&quot;</span><span class="p">:</span>
@@ -716,7 +851,7 @@ On the Batch portal, in <code>Features/Applications</code> you will see somethin
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
 </span></code></pre></div>
 <p>The needed files (a list of files path to be added to the archive) are defined above in the script.</p>
-<h4 id="3-upload-the-zip-file-to-azure-blob-storage"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#3-upload-the-zip-file-to-azure-blob-storage">3. Upload the zip file to Azure Blob Storage</a></h4>
+<h3 id="3-upload-the-zip-file-to-azure-blob-storage">3. Upload the zip file to Azure Blob Storage</h3>
 <p>The <code>response</code> object of step 1 contains the URL of the blob storage where the application package will be uploaded. We can use the <code>azure-storage-blob</code> package to upload the zip file to the blob storage.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span> <span class="nn">azure.storage.blob</span> <span class="kn">import</span> <span class="n">BlobClient</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
@@ -724,7 +859,7 @@ On the Batch portal, in <code>Features/Applications</code> you will see somethin
 </span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">blob_client</span> <span class="o">=</span> <span class="n">BlobClient</span><span class="o">.</span><span class="n">from_blob_url</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">storage_url</span><span class="p">)</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">blob_client</span><span class="o">.</span><span class="n">upload_blob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">))</span>
 </span></code></pre></div>
-<h4 id="4-activate-the-new-version-of-the-application-package"><a class="toclink" href="2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#4-activate-the-new-version-of-the-application-package">4. Activate the new version of the application package</a></h4>
+<h3 id="4-activate-the-new-version-of-the-application-package">4. Activate the new version of the application package</h3>
 <p>After uploading the zip file, we need to activate the new version of the application package. We can do this by calling the <code>activate</code> method of the <code>BatchManagementClient</code> class.</p>
 <div class="language-python highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">client</span><span class="o">.</span><span class="n">application_package</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span>
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>    <span class="n">resource_group_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RESOURCE_GROUP_NAME&quot;</span><span class="p">),</span>
@@ -776,121 +911,79 @@ On the Batch portal, in <code>Features/Applications</code> you will see somethin
 </span></code></pre></div>
 
 </details>
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/16227517?v=4" alt="Marcello De Giorgi">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2024-10-25 00:00:00">October 25, 2024</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="category/python/" class="md-meta__link">Python</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              10 min read
-            
-          </li>
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="create-a-comand-line-interface-in-few-minutes"><a class="toclink" href="2024/10/25/create-a-comand-line-interface-in-few-minutes/">Create a Comand line interface in few minutes</a></h2>
-<p><img alt="cli title" src="images/cli_post_title.png" width="800" /></p>
-<p>A command line interface could seem an ancient tool to all non expert users, nowadays used to fancy click and drop user interfaces. Nothing more wrong! It is also a valid tool to enhance your libraries and projects, reusable in bash scripts and ci/cd pipelines.</p>
-<p>In this tutorial we will deep dive into the python <a href="https://click.palletsprojects.com/en/8.1.x/">click</a> library and create a simple command line interface (CLI) to manage the settings value and interact with our project.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="2024/10/25/create-a-comand-line-interface-in-few-minutes/">
-          Continue reading
-        </a>
-      </nav>
-    
-  </div>
-</article>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-      <nav class="md-post__authors md-typeset">
-        
-          <span class="md-author">
-            <img src="https://avatars.githubusercontent.com/u/16227517?v=4" alt="Marcello De Giorgi">
-          </span>
-        
-      </nav>
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2024-10-18 00:00:00">October 18, 2024</time></li>
-        
-          <li class="md-meta__item">
-            in
-            
-              <a href="category/validation/" class="md-meta__link">Validation</a>, 
-              <a href="category/python/" class="md-meta__link">Python</a></li>
-        
-        
-          
-          <li class="md-meta__item">
-            
-              7 min read
-            
-          </li>
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="manage-settings-with-pydantic"><a class="toclink" href="2024/10/18/manage-settings-with-pydantic/">Manage settings with Pydantic</a></h2>
-<p><img align="right" alt="pydantic-image" src="images/pydantic_logo.jpg" width="150" />
-<a href="https://docs.pydantic.dev/latest/">Pydantic</a> is a wonderful library that allows to easily validate your data, simply defining a schema. It is highly customizable and can be used, for instance, to validate data coming from a POST request. </p>
-<p>In this tutorial we will use it to create a <code>Settings</code> class whose fields can be changed in different ways, triggering any time the validation.</p>
-
-    
-      <nav class="md-post__action">
-        <a href="2024/10/18/manage-settings-with-pydantic/">
-          Continue reading
-        </a>
-      </nav>
-    
-  </div>
-</article>
-      
-      
-        
-          
 
 
 
-<nav class="md-pagination">
+
+
+
+
   
-</nav>
-        
+  
+
+
+
+
+  
+
+
+
+
+  <h2 id="__comments">Comments</h2>
+  <!-- Insert generated snippet here -->
+  <script src="https://giscus.app/client.js"
+        data-repo="DeGiorgiMarcello/degs-notes"
+        data-repo-id="R_kgDONAMURA"
+        data-category="Announcements"
+        data-category-id="DIC_kwDONAMURM4CjWvd"
+        data-mapping="title"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="preferred_color_scheme"
+        data-lang="en"
+        crossorigin="anonymous"
+        async>
+        </script>
+  <!-- Synchronize Giscus theme with palette -->
+  <script>
+    var giscus = document.querySelector("script[src*=giscus]")
+
+    // Set palette on initial load
+    var palette = __md_get("__palette")
+    if (palette && typeof palette.color === "object") {
+      var theme = palette.color.scheme === "slate"
+        ? "transparent_dark"
+        : "light"
+
+      // Instruct Giscus to set theme
+      giscus.setAttribute("data-theme", theme) 
+    }
+
+    // Register event handlers after documented loaded
+    document.addEventListener("DOMContentLoaded", function() {
+      var ref = document.querySelector("[data-md-component=palette]")
+      ref.addEventListener("change", function() {
+        var palette = __md_get("__palette")
+        if (palette && typeof palette.color === "object") {
+          var theme = palette.color.scheme === "slate"
+            ? "transparent_dark"
+            : "light"
+
+          // Instruct Giscus to change theme
+          var frame = document.querySelector(".giscus-frame")
+          frame.contentWindow.postMessage(
+            { giscus: { setConfig: { theme } } },
+            "https://giscus.app"
+          )
+        }
+      })
+    })
+  </script>
+
       
-    </div>
+    </article>
   </div>
 
           
@@ -969,10 +1062,10 @@ On the Batch portal, in <code>Features/Applications</code> you will see somethin
     </div>
     
     
-    <script id="__config" type="application/json">{"base": ".", "features": ["navigation.tabs", "navigation.instant", "navigation.top"], "search": "assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../../../..", "features": ["navigation.tabs", "navigation.instant", "navigation.top"], "search": "../../../../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.d6f25eb3.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d6f25eb3.min.js"></script>
       
     
   </body>
