@@ -12,5 +12,5 @@ In my daily work I often tend to go back and take a look at some old code that I
 
 For this reason I've decide to collect here some guides, tutorials and personal notes that could be useful in the future. 
 
-Enjoy your reading!
+Enjoy your reading! 📖
 
