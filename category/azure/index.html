@@ -660,120 +660,16 @@
   </header>
   <div class="md-post__content md-typeset">
     <h2 id="how-to-create-an-azure-batchs-application-package-automatically"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/">How to create an Azure Batch's Application Package automatically</a></h2>
-<p>While using Azure Batch, you may need to create an application package to run your applications in the cloud. This package contains all the necessary files and dependencies for your application to run on Azure Batch nodes. </p>
+<p>While using Azure Batch, you may need to create an application package to run your applications in the cloud. </p>
 <p>The creation can be done manually, generating and uploading a <code>.zip</code> file to the Azure Batch resource Portal. However, this process can be tedious and time-consuming, especially if you have multiple applications or need to update the package frequently, for instance at every new release (or hotfix!).</p>
-<p>In this post we will cover how to automate the creation of an Azure Batch application package using a Python script. </p>
-<h3 id="prerequisites"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#prerequisites">Prerequisites</a></h3>
-<h4 id="things-you-should-know"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#things-you-should-know">Things you should know</a></h4>
-<ul>
-<li>Basic knowledge of Python and Azure Batch</li>
-<li>What is an <a href="https://learn.microsoft.com/en-us/azure/batch/batch-application-packages">Application Package</a></li>
-</ul>
-<h4 id="packages"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#packages">Packages</a></h4>
-<p>The following packages are required:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>pip install azure-identity azure-mgmt-batch azure-storage-blob
-</span></code></pre></div></p>
-<h3 id="steps"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#steps">Steps</a></h3>
-<p>The script will:
-1. Create a new version of the application package (and a new application if it does not exist).
-1. Zip the needed files
-1. Upload the zip file to Azure Blob Storage
-1. Activate the new version of the application package</p>
-<h3 id="step-by-step"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#step-by-step">Step by step</a></h3>
-<p><strong>NOTE</strong>: For the sake of simplicity, we will use the AzureDefaultCredential, which uses the Azure CLI credentials. You can use any other authentication method supported by the Azure SDK for Python.</p>
-<p>All the configuration parameters are stored in environment variables. You can set them in your terminal or use a <code>.env</code> file with the <code>python-dotenv</code> package.</p>
-<h4 id="1-create-a-new-version-of-the-application-package"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#1-create-a-new-version-of-the-application-package">1. Create a new version of the application package</a></h4>
-<p><div class="language-python highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="kn">from</span> <span class="nn">azure.identity</span> <span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
-</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="kn">from</span> <span class="nn">azure.mgmt.batch</span> <span class="kn">import</span> <span class="n">BatchManagementClient</span>
-</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
-</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="n">client</span> <span class="o">=</span> <span class="n">BatchManagementClient</span><span class="p">(</span>
-</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>        <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">(),</span>
-</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>        <span class="n">subscription_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUBSCRIPTION_ID&quot;</span><span class="p">),</span>
-</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>    <span class="p">)</span>
-</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>
-</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">application_package</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>    <span class="n">resource_group_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RESOURCE_GROUP_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>    <span class="n">account_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BATCH_ACCOUNT_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>    <span class="n">application_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;APPLICATION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a>    <span class="n">version_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">)</span>
-</span><span id="__span-13-15"><a id="__codelineno-13-15" name="__codelineno-13-15" href="#__codelineno-13-15"></a><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Active&quot;</span><span class="p">:</span>
-</span><span id="__span-13-16"><a id="__codelineno-13-16" name="__codelineno-13-16" href="#__codelineno-13-16"></a>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Application package is already active. Please provide a new version name.&quot;</span><span class="p">)</span>
-</span><span id="__span-13-17"><a id="__codelineno-13-17" name="__codelineno-13-17" href="#__codelineno-13-17"></a>
-</span><span id="__span-13-18"><a id="__codelineno-13-18" name="__codelineno-13-18" href="#__codelineno-13-18"></a><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Pending&quot;</span><span class="p">:</span>
-</span><span id="__span-13-19"><a id="__codelineno-13-19" name="__codelineno-13-19" href="#__codelineno-13-19"></a>    <span class="o">...</span>
-</span></code></pre></div>
-On the Batch portal, in <code>Features/Applications</code> you will see something like this:
-<img alt="alt text" src="../../images/app_pack_pending.png" /></p>
-<h4 id="2-zip-the-needed-files"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#2-zip-the-needed-files">2. Zip the needed files</a></h4>
-<p>import zipfile  </p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="o">...</span>
-</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Pending&quot;</span><span class="p">:</span>
-</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
-</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a>        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">needed_files</span><span class="p">:</span>
-</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-</span></code></pre></div>
-<p>The needed files (a list of files path to be added to the archive) are defined above in the script.</p>
-<h4 id="3-upload-the-zip-file-to-azure-blob-storage"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#3-upload-the-zip-file-to-azure-blob-storage">3. Upload the zip file to Azure Blob Storage</a></h4>
-<p>The <code>response</code> object of step 1 contains the URL of the blob storage where the application package will be uploaded. We can use the <code>azure-storage-blob</code> package to upload the zip file to the blob storage.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="kn">from</span> <span class="nn">azure.storage.blob</span> <span class="kn">import</span> <span class="n">BlobClient</span>
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="o">...</span>
-</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="n">blob_client</span> <span class="o">=</span> <span class="n">BlobClient</span><span class="o">.</span><span class="n">from_blob_url</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">storage_url</span><span class="p">)</span>
-</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a><span class="n">blob_client</span><span class="o">.</span><span class="n">upload_blob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">))</span>
-</span></code></pre></div>
-<h4 id="4-activate-the-new-version-of-the-application-package"><a class="toclink" href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/#4-activate-the-new-version-of-the-application-package">4. Activate the new version of the application package</a></h4>
-<p>After uploading the zip file, we need to activate the new version of the application package. We can do this by calling the <code>activate</code> method of the <code>BatchManagementClient</code> class.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="n">client</span><span class="o">.</span><span class="n">application_package</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>    <span class="n">resource_group_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RESOURCE_GROUP_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>    <span class="n">account_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BATCH_ACCOUNT_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a>    <span class="n">application_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;APPLICATION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>    <span class="n">version_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-16-6"><a id="__codelineno-16-6" name="__codelineno-16-6" href="#__codelineno-16-6"></a>    <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">},</span>
-</span><span id="__span-16-7"><a id="__codelineno-16-7" name="__codelineno-16-7" href="#__codelineno-16-7"></a><span class="p">)</span>
-</span></code></pre></div>
-<p>The application package is now active and ready to be used in your Azure Batch jobs.</p>
-<details>
-<summary>Complete code</summary>
+<p>In this post we will cover how to automate the creation of an Azure Batch application package using a Python script.</p>
 
-<div class="language-python highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="kn">from</span> <span class="nn">azure.identity</span> <span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a><span class="kn">from</span> <span class="nn">azure.mgmt.batch</span> <span class="kn">import</span> <span class="n">BatchManagementClient</span>
-</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="kn">from</span> <span class="nn">azure.storage.blob</span> <span class="kn">import</span> <span class="n">BlobClient</span>  
-</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a><span class="kn">import</span> <span class="nn">zipfile</span>  
-</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a>
-</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a>
-</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="n">client</span> <span class="o">=</span> <span class="n">BatchManagementClient</span><span class="p">(</span>
-</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a>        <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">(),</span>
-</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>        <span class="n">subscription_id</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;SUBSCRIPTION_ID&quot;</span><span class="p">),</span>
-</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a>    <span class="p">)</span>
-</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>
-</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a><span class="n">response</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">application_package</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>    <span class="n">resource_group_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RESOURCE_GROUP_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a>    <span class="n">account_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BATCH_ACCOUNT_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>    <span class="n">application_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;APPLICATION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>    <span class="n">version_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="p">)</span>
-</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Active&quot;</span><span class="p">:</span>
-</span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a>    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Application package is already active. Please provide a new version name.&quot;</span><span class="p">)</span>
-</span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a>
-</span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">state</span> <span class="o">==</span> <span class="s2">&quot;Pending&quot;</span><span class="p">:</span>
-</span><span id="__span-17-22"><a id="__codelineno-17-22" name="__codelineno-17-22" href="#__codelineno-17-22"></a>    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
-</span><span id="__span-17-23"><a id="__codelineno-17-23" name="__codelineno-17-23" href="#__codelineno-17-23"></a>        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">needed_files</span><span class="p">:</span>
-</span><span id="__span-17-24"><a id="__codelineno-17-24" name="__codelineno-17-24" href="#__codelineno-17-24"></a>            <span class="n">zf</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
-</span><span id="__span-17-25"><a id="__codelineno-17-25" name="__codelineno-17-25" href="#__codelineno-17-25"></a>
-</span><span id="__span-17-26"><a id="__codelineno-17-26" name="__codelineno-17-26" href="#__codelineno-17-26"></a><span class="n">blob_client</span> <span class="o">=</span> <span class="n">BlobClient</span><span class="o">.</span><span class="n">from_blob_url</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">storage_url</span><span class="p">)</span>
-</span><span id="__span-17-27"><a id="__codelineno-17-27" name="__codelineno-17-27" href="#__codelineno-17-27"></a><span class="n">blob_client</span><span class="o">.</span><span class="n">upload_blob</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">))</span>
-</span><span id="__span-17-28"><a id="__codelineno-17-28" name="__codelineno-17-28" href="#__codelineno-17-28"></a>
-</span><span id="__span-17-29"><a id="__codelineno-17-29" name="__codelineno-17-29" href="#__codelineno-17-29"></a><span class="n">client</span><span class="o">.</span><span class="n">application_package</span><span class="o">.</span><span class="n">activate</span><span class="p">(</span>
-</span><span id="__span-17-30"><a id="__codelineno-17-30" name="__codelineno-17-30" href="#__codelineno-17-30"></a>    <span class="n">resource_group_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;RESOURCE_GROUP_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-31"><a id="__codelineno-17-31" name="__codelineno-17-31" href="#__codelineno-17-31"></a>    <span class="n">account_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;BATCH_ACCOUNT_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-32"><a id="__codelineno-17-32" name="__codelineno-17-32" href="#__codelineno-17-32"></a>    <span class="n">application_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;APPLICATION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-33"><a id="__codelineno-17-33" name="__codelineno-17-33" href="#__codelineno-17-33"></a>    <span class="n">version_name</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;VERSION_NAME&quot;</span><span class="p">),</span>
-</span><span id="__span-17-34"><a id="__codelineno-17-34" name="__codelineno-17-34" href="#__codelineno-17-34"></a>    <span class="n">parameters</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;zip&quot;</span><span class="p">},</span>
-</span><span id="__span-17-35"><a id="__codelineno-17-35" name="__codelineno-17-35" href="#__codelineno-17-35"></a><span class="p">)</span>
-</span></code></pre></div>
-
-</details>
+    
+      <nav class="md-post__action">
+        <a href="../../2025/05/11/how-to-create-an-azure-batchs-application-package-automatically/">
+          Continue reading
+        </a>
+      </nav>
     
   </div>
 </article>
